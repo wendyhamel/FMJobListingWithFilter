@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Job Listings</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind play cdn ( for development and play purposes ) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="script/tailwind.config.js"></script>
+
+  <!-- Alpine.js -->
+  <!-- Alpine Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="filtering()" class="text-project-base antialiased">
+  <header class="bg-cyan">
+    <h1 class="sr-only">Job Listings</h1>
+    <img class="object-cover w-full md:hidden" src="./images/bg-header-mobile.svg" alt="cyan colored shapes for background">
+    <img class="hidden md:block md:object-cover md:w-full" src="./images/bg-header-desktop.svg" alt="cyan colored shapes for background">
+  </header>
+  <main class="bg-cyan-gray-lightest">
+    <section x-show="activeFilters.length" class="relative flex items-center gap-6 bg-white rounded-lg shadow-xl shadow-cyan/20 p-5 mx-6 -mt-10 md:justify-between">
+      <ul class="flex gap-4 flex-wrap">
+        <template x-for="activeFilter in activeFilters">
+          <li class="rounded overflow-hidden bg-cyan/10">
+            <span class="text-cyan font-bold p-2" x-text="activeFilter"></span>
+            <button x-on:click="removeFilter(activeFilter)" class="p-2 bg-cyan text-base text-white hover:bg-cyan-gray-dark ease-in-out duration-150"><img src="./images/icon-remove.svg" :alt="'remove ' + activeFilter"></button>
+          </li>
+        </template>
+      </ul>
+      <button x-on:click="clearFilters" class="text-cyan-gray text-base font-bold p-2 hover:underline hover:text-cyan ease-in-out duration-150">Clear</button>
+    </section>
+    <ul x-show="jobs.length" class="pt-14 px-6 grid gap-10 md:max-w-6xl md:mx-auto">
+      <template x-for="job in filteredJobs" :key="job.id">
+        <li class="rounded shadow-xl bg-white shadow-cyan/20 px-5 py-6" :class="{'border-l-[5px] border-cyan' : job.featured}">
+          <div class="-mt-12">
+            <img class="w-12 md:w-24" :src="job.logo" :alt="job.company">
+          </div>
+          <div class="pt-2 pb-3 space-y-3">
+            <p class="space-x-1.5">
+              <span class="text-cyan font-bold pe-3" x-text="job.company"></span>
+              <span x-show="job.new" class="inline-block leading-none bg-cyan rounded-full text-white uppercase font-bold px-2 pt-1.5 pb-1"> NEW!</span>
+              <span x-show="job.featured" class="inline-block leading-none bg-cyan-gray-dark rounded-full text-white uppercase font-bold px-2 pt-1.5 pb-1"> featured</span>
+            </p>
+            <a href="#" class="inline-block font-bold hover:text-cyan ease-in-out duration-150" x-text="job.position"></a>
+            <ul class="text-cyan-gray flex gap-3">
+              <span x-text="job.postedAt"></span>
+              <span>&middot;</span>
+              <span x-text="job.contract"></span>
+              <span>&middot;</span>
+              <span x-text="job.location"></span>
+            </ul>
+          </div>
+          <div class="border-t border-cyan-gray/60 pt-5 flex flex-wrap gap-4">
+            <button x-on:click="addFilter(job.role)" class="rounded bg-cyan bg-opacity-10 text-base text-cyan font-bold px-2 py-1 hover:bg-opacity-100 hover:text-white ease-in-out duration-150" x-text="job.role"></button>
+            <button x-on:click="addFilter(job.level)" class="rounded bg-cyan bg-opacity-10 text-base text-cyan font-bold px-2 py-1 hover:bg-opacity-100 hover:text-white ease-in-out duration-150" x-text="job.level"></button>
+            <template x-for="language in job.languages">
+              <button x-on:click="addFilter(language)" class="rounded bg-cyan bg-opacity-10 text-base text-cyan font-bold px-2 py-1 hover:bg-opacity-100 hover:text-white ease-in-out duration-150" x-text="language"></button>
+            </template>
+            <template x-for="tool in job.tools">
+              <button x-on:click="addFilter(tool)" class="rounded bg-cyan bg-opacity-10 text-base text-cyan font-bold px-2 py-1 hover:bg-opacity-100 hover:text-white ease-in-out duration-150" x-text="tool"></button>
+            </template>
+          </div>
+        </li>
+      </template>
+    </ul>
+  </main>
+  <footer class="fixed bottom-0 inset-x-0 text-center text-xs py-1 bg-cyan-gray-lightest text-cyan-gray-dark opacity-0 translate-y-2 hover:opacity-90 hover:translate-y-0 transform transition ease-out duration-300 md:py-2">
+    <div class="px-2 text-center">
+      Challenge by <a class="hover:text-cyan-gray hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/challenges/insure-landing-page-uTU68JV8" target="_blank">Frontend Mentor</a>.
+      Coded by <a class="hover:text-cyan-gray hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/profile/wendyhamel" target="_blank">Wendy Hamel</a>.
+    </div>
+  </footer>
+</body>
+<script src="script/jobs.js"></script>
+</html>
