@@ -175,9 +175,15 @@ window.filtering = function() {
 			if(this.activeFilters.length) {
 				let filteredJobsArray = this.jobs;
 				this.activeFilters.forEach(filter => {
-					filteredJobsArray = this.jobs.filter((job) => {
-						return job.role === filter || job.level === filter || job.languages.includes(filter) || job.tools.includes(filter)
-					})
+					if (filter === this.activeFilters[0]) {
+						filteredJobsArray = this.jobs.filter((job) => {
+							return job.role === filter || job.level === filter || job.languages.includes(filter) || job.tools.includes(filter)
+						})
+					} else {
+						filteredJobsArray = filteredJobsArray.filter((job) => {
+							return job.role === filter || job.level === filter || job.languages.includes(filter) || job.tools.includes(filter)
+						})
+					}
 				});
 				return filteredJobsArray;
 			}
